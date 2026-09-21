@@ -1,0 +1,172 @@
+<!-- mi-web/index.html -->
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Web personal de David Pino, estudiante de 1º DAM en el IES Simarro." />
+  <meta name="theme-color" content="#0a1024" />
+  <title>David Pino · 1º DAM · IES Simarro</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <!-- ===================== CABECERA ===================== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#inicio" class="brand" aria-label="Ir al inicio">
+        <span class="brand-mark" aria-hidden="true">▲</span> David&nbsp;Pino
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-list">
+          <li><a href="#sobre-mi">Sobre mí</a></li>
+          <li><a href="#he-hecho">Lo que he hecho</a></li>
+          <li><a href="#me-gusta">Me gusta</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="true" aria-label="Cambiar a modo claro">
+        <span class="toggle-track">
+          <span class="toggle-sun" aria-hidden="true">☀</span>
+          <span class="toggle-moon" aria-hidden="true">☾</span>
+          <span class="toggle-thumb"></span>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <main id="inicio">
+
+    <!-- ===================== HERO: escena de los Pirineos ===================== -->
+    <section class="hero" id="hero">
+
+      <!-- Escena por capas -->
+      <div class="scene" aria-hidden="true">
+        <div class="sky"></div>
+        <div class="sun" id="sun"></div>
+        <div class="stars" id="stars"></div>
+        <div class="cloud cloud-1"><i></i></div>
+        <div class="cloud cloud-2"><i></i></div>
+        <div class="mountain far"  id="m-far"></div>
+        <div class="mountain mid"  id="m-mid"></div>
+        <div class="mountain near" id="m-near"></div>
+        <div class="forest"        id="m-forest"></div>
+        <div class="scene-fade"></div>
+      </div>
+
+      <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+
+      <div class="hero-inner">
+        <span class="status-chip"><span class="dot"></span> Abierto a aprender cosas nuevas</span>
+        <p class="eyebrow">1º DAM · IES Simarro</p>
+        <h1>David <span class="name-accent">Pino</span></h1>
+        <p class="lead">“Una frase no podría decir quién soy realmente.”</p>
+        <p class="hero-sub">He hecho de todo un poco: viajar, disfrutar mi juventud, hacer deporte siempre que puedo… y ahora curso DAM. No quiero ser algo, quiero ser alguien.</p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#sobre-mi">Sobre mí</a>
+          <a class="btn btn-ghost" href="#he-hecho">Lo que he hecho</a>
+        </div>
+      </div>
+
+      <a href="#sobre-mi" class="scroll-cue" aria-label="Bajar"><span class="mouse"><span class="wheel"></span></span></a>
+    </section>
+
+    <!-- ===================== SOBRE MÍ ===================== -->
+    <section id="sobre-mi" class="section">
+      <div class="section-inner about-grid">
+        <aside class="id-card reveal">
+          <div class="avatar">
+            <span class="avatar-ring"></span>
+            <span class="avatar-emoji">🏔️</span>
+            <span class="avatar-initials">DP</span>
+          </div>
+          <h3>David Pino</h3>
+          <p class="id-role">Estudiante · 1º DAM</p>
+          <ul class="id-chips"><li>26 años</li><li>IES Simarro</li><li>Minimalismo</li><li>Deporte</li></ul>
+        </aside>
+
+        <div class="about-copy">
+          <p class="kicker reveal">Sobre mí</p>
+          <h2 class="reveal">Una sola frase <span class="hl">no define</span> a nadie.</h2>
+          <p class="reveal">Soy David Pino, del ciclo de <strong>1º DAM</strong> del <strong>IES Simarro</strong>. Tengo 26 años y creo que las personas se entienden mejor por lo que hacen que por una etiqueta.</p>
+          <p class="reveal">He hecho de todo un poco: viajar, disfrutar mi juventud, hacer deporte siempre que puedo y, ahora, formarme en desarrollo de aplicaciones multiplataforma. Me interesa el camino más que el cartel de la meta.</p>
+          <blockquote class="reveal">“No quiero ser algo, quiero ser alguien.”</blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== LO QUE HE HECHO ===================== -->
+    <section id="he-hecho" class="section">
+      <div class="section-inner">
+        <p class="kicker reveal">Lo que he hecho</p>
+        <h2 class="reveal">He hecho <span class="hl">de todo</span> un poco</h2>
+        <p class="section-lead reveal">Algunos capítulos de mi historia, hasta ahora.</p>
+
+        <ul class="cards">
+          <li class="card reveal" tabindex="0"><span class="card-num">01</span><span class="card-emoji">✈️</span><h3>Viajar</h3><p>Conocer sitios, cambiar de rutina y aprender fuera de casa.</p></li>
+          <li class="card reveal" tabindex="0"><span class="card-num">02</span><span class="card-emoji">🌱</span><h3>Disfrutar mi juventud</h3><p>Aprovechar el momento, vivir experiencias y no correr tanto.</p></li>
+          <li class="card reveal" tabindex="0"><span class="card-num">03</span><span class="card-emoji">🏃</span><h3>Hacer deporte</h3><p>Mantenerme activo siempre que puedo, como equilibrio personal.</p></li>
+          <li class="card reveal" tabindex="0"><span class="card-num">04</span><span class="card-emoji">💻</span><h3>Formación en DAM</h3><p>1º de Desarrollo de Aplicaciones Multiplataforma en el IES Simarro.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== ME GUSTA ===================== -->
+    <section id="me-gusta" class="section">
+      <div class="section-inner">
+        <p class="kicker reveal">Me gusta</p>
+        <h2 class="reveal">Lo que me <span class="hl">mueve</span></h2>
+        <p class="section-lead reveal">Me gusta la música, pero sobre todo ver películas y series. Los videojuegos también, aunque hoy pocos me entretienen lo suficiente.</p>
+
+        <div class="marquee reveal">
+          <div class="marquee-track">
+            <span>Música 🎧</span><span>Películas 🎬</span><span>Series 📺</span><span>Videojuegos 🎮</span><span>Deporte 🏃</span><span>Viajar ✈️</span><span>Montaña 🏔️</span><span>Minimalismo ⚪</span>
+            <span>Música 🎧</span><span>Películas 🎬</span><span>Series 📺</span><span>Videojuegos 🎮</span><span>Deporte 🏃</span><span>Viajar ✈️</span><span>Montaña 🏔️</span><span>Minimalismo ⚪</span>
+          </div>
+        </div>
+
+        <ul class="likes">
+          <li class="like reveal"><span class="like-emoji">🎧</span><h3>Música</h3><p>Siempre de fondo.</p></li>
+          <li class="like reveal"><span class="like-emoji">🎬</span><h3>Películas</h3><p>Mi debilidad.</p></li>
+          <li class="like reveal"><span class="like-emoji">📺</span><h3>Series</h3><p>Para desconectar.</p></li>
+          <li class="like reveal"><span class="like-emoji">🎮</span><h3>Videojuegos</h3><p>Con cuentagotas.</p></li>
+          <li class="like reveal"><span class="like-emoji">🏔️</span><h3>Montaña</h3><p>Los Pirineos mandan.</p></li>
+          <li class="like reveal"><span class="like-emoji">⚪</span><h3>Minimalismo</h3><p>Menos, pero mejor.</p></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== PIE / CONTACTO ===================== -->
+  <footer id="contacto" class="site-footer">
+    <div class="footer-inner">
+      <p class="kicker reveal">Contacto</p>
+      <h2 class="reveal">Hablemos de <span class="hl">proyectos, música o series</span></h2>
+      <p class="footer-lead reveal">¿Quieres contarme algo? Escríbeme sin problema.</p>
+
+      <!-- Cambia estos enlaces por tus datos reales -->
+      <div class="contact-links reveal">
+        <a href="mailto:tu.correo@ejemplo.com" class="contact-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> Correo</a>
+        <a href="https://github.com/tu-usuario" target="_blank" rel="noopener noreferrer" class="contact-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.94.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg> GitHub</a>
+        <a href="https://www.linkedin.com/in/tu-usuario" target="_blank" rel="noopener noreferrer" class="contact-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.3-.02-2.96-1.8-2.96-1.8 0-2.08 1.4-2.08 2.86V21h-4V9Z"/></svg> LinkedIn</a>
+      </div>
+
+      <p class="copy">© <span id="year"></span> David Pino · Hecho con HTML, CSS y JavaScript.</p>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="back-to-top" type="button" aria-label="Volver al principio">↑</button>
+  <canvas id="snow" class="snow-canvas" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+
+</body>
+</html>
