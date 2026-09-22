@@ -5,7 +5,7 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const canHover = window.matchMedia("(hover: hover)").matches;
 
-  // Declarado aquí para que applyTheme() (más abajo) pueda usarlo sin error
+  // Declarado arriba para que applyTheme() pueda usarlo sin dar error
   let snowColor = "rgba(255,255,255,.85)";
 
   /* ====== Tema claro/oscuro ====== */
