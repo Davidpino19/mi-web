@@ -5,6 +5,9 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const canHover = window.matchMedia("(hover: hover)").matches;
 
+  // Declarado aquí para que applyTheme() (más abajo) pueda usarlo sin error
+  let snowColor = "rgba(255,255,255,.85)";
+
   /* ====== Tema claro/oscuro ====== */
   const KEY = "mi-web-theme";
   const themeToggle = document.getElementById("themeToggle");
@@ -134,9 +137,20 @@
   window.addEventListener("scroll", () => { if (top) top.classList.toggle("show", window.scrollY > 480); }, { passive: true });
   if (top) top.addEventListener("click", () => window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" }));
 
+  /* ====== Barra de progreso de scroll ====== */
+  const bar = document.getElementById("scrollProgress");
+  function paintProgress() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const p = max > 0 ? (window.scrollY / max) * 100 : 0;
+    if (bar) bar.style.width = p + "%";
+  }
+  window.addEventListener("scroll", paintProgress, { passive: true });
+  window.addEventListener("resize", paintProgress);
+  paintProgress();
+
   /* ====== Nieve ====== */
   const canvas = document.getElementById("snow");
-  let ctx, flakes = [], W = 0, H = 0, snowColor = "rgba(255,255,255,.85)";
+  let ctx, flakes = [], W = 0, H = 0;
   function readSnowColor() { snowColor = (getComputedStyle(root).getPropertyValue("--snow") || "").trim() || "rgba(255,255,255,.85)"; }
   function resize() { if (!canvas) return; W = canvas.width = innerWidth; H = canvas.height = innerHeight;
     const n = Math.min(90, Math.floor(W / 16));
