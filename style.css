@@ -212,6 +212,7 @@ section[id],footer[id]{scroll-margin-top:90px}
 .likes{list-style:none;margin:0;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
 .like{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.3rem;text-align:center;transition:transform .25s,border-color .25s}
 .like:hover{transform:translateY(-6px);border-color:var(--accent)}
+.like-link{display:block;height:100%;text-decoration:none;color:inherit}
 .like-emoji{font-size:2.4rem;display:block;margin-bottom:.5rem;transition:transform .3s}
 .like:hover .like-emoji{transform:scale(1.2) rotate(8deg)}
 .like h3{margin:0 0 .2rem;font-size:1.05rem}.like p{margin:0;color:var(--muted);font-size:.9rem}
