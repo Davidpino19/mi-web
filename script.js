@@ -148,6 +148,49 @@
   window.addEventListener("resize", paintProgress);
   paintProgress();
 
+  /* ====== Cursor original ====== */
+  const cursorDot = document.querySelector('.cursor-dot');
+  const cursorRing = document.querySelector('.cursor-ring');
+  let cursorX = window.innerWidth / 2, cursorY = window.innerHeight / 2;
+
+  if (cursorDot && cursorRing && !reduceMotion) {
+    document.addEventListener('pointermove', (event) => {
+      cursorX = event.clientX;
+      cursorY = event.clientY;
+      cursorDot.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+      cursorRing.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+    });
+
+    document.addEventListener('pointerdown', () => {
+      cursorDot.style.width = '18px';
+      cursorDot.style.height = '18px';
+      cursorRing.style.width = '46px';
+      cursorRing.style.height = '46px';
+    });
+
+    document.addEventListener('pointerup', () => {
+      cursorDot.style.width = '10px';
+      cursorDot.style.height = '10px';
+      cursorRing.style.width = '32px';
+      cursorRing.style.height = '32px';
+    });
+
+    document.querySelectorAll('a, button, .card, .like').forEach((el) => {
+      el.addEventListener('mouseenter', () => {
+        cursorRing.style.width = '42px';
+        cursorRing.style.height = '42px';
+        cursorDot.style.width = '14px';
+        cursorDot.style.height = '14px';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorRing.style.width = '32px';
+        cursorRing.style.height = '32px';
+        cursorDot.style.width = '10px';
+        cursorDot.style.height = '10px';
+      });
+    });
+  }
+
   /* ====== Nieve ====== */
   const canvas = document.getElementById("snow");
   let ctx, flakes = [], W = 0, H = 0;

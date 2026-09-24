@@ -39,7 +39,24 @@
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased;
-  font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;transition:background .4s,color .4s}
+  font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;transition:background .4s,color .4s;cursor:none}
+*{cursor:none}
+body a, body button, body input, body textarea, body select {cursor:none}
+
+.cursor-dot, .cursor-ring {
+  position:fixed;left:0;top:0;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%);z-index:200;
+  transition:width .2s ease,height .2s ease,opacity .2s ease,background .2s ease,border-color .2s ease;
+}
+.cursor-dot {
+  width:10px;height:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 18px var(--glow);
+}
+.cursor-ring {
+  width:32px;height:32px;border:1.5px solid rgba(255,255,255,.75);background:rgba(255,255,255,.05);backdrop-filter:blur(3px)
+}
+body a:hover ~ .cursor-ring, body button:hover ~ .cursor-ring {width:42px;height:42px}
+body a:hover ~ .cursor-dot, body button:hover ~ .cursor-dot {width:14px;height:14px}
+
+@media (max-width: 768px){body{cursor:auto} *{cursor:auto} .cursor-dot,.cursor-ring{display:none}}
 h1,h2,h3,.brand,.kicker,.card-num,.status-chip{font-family:"Space Grotesk",system-ui,sans-serif}
 a{color:inherit}button{font:inherit}
 :focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:6px}
