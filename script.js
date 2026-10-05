@@ -33,6 +33,93 @@
   const year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
+  /* ====== Tiempo (Open-Meteo) ====== */
+  const weatherIcon = document.getElementById("weatherIcon");
+  const weatherTemp = document.getElementById("weatherTemp");
+  const weatherDescription = document.getElementById("weatherDescription");
+  const weatherMax = document.getElementById("weatherMax");
+  const weatherMin = document.getElementById("weatherMin");
+  const weatherHour = document.getElementById("weatherHour");
+
+  const weatherCodeMap = {
+    0: { label: "Despejado", icon: "☀️" },
+    1: { label: "Mayormente despejado", icon: "🌤️" },
+    2: { label: "Parcialmente nublado", icon: "⛅" },
+    3: { label: "Nublado", icon: "☁️" },
+    45: { label: "Neblina", icon: "🌫️" },
+    48: { label: "Neblina con escarcha", icon: "🌫️" },
+    51: { label: "Llovizna ligera", icon: "🌦️" },
+    53: { label: "Llovizna", icon: "🌦️" },
+    55: { label: "Llovizna fuerte", icon: "🌧️" },
+    56: { label: "Llovizna helada", icon: "🌧️" },
+    57: { label: "Llovizna helada fuerte", icon: "🌧️" },
+    61: { label: "Lluvia ligera", icon: "🌦️" },
+    63: { label: "Lluvia moderada", icon: "🌧️" },
+    65: { label: "Lluvia fuerte", icon: "🌧️" },
+    66: { label: "Lluvia helada", icon: "🌧️" },
+    67: { label: "Lluvia helada fuerte", icon: "🌧️" },
+    71: { label: "Nieve ligera", icon: "🌨️" },
+    73: { label: "Nieve moderada", icon: "🌨️" },
+    75: { label: "Nieve fuerte", icon: "❄️" },
+    77: { label: "Granizo", icon: "🌨️" },
+    80: { label: "Chubascos", icon: "🌦️" },
+    81: { label: "Lluvia abundante", icon: "🌧️" },
+    82: { label: "Lluvia muy fuerte", icon: "⛈️" },
+    85: { label: "Nieve ligera", icon: "🌨️" },
+    86: { label: "Nieve fuerte", icon: "❄️" },
+    95: { label: "Tormenta", icon: "⛈️" },
+    96: { label: "Tormenta con granizo", icon: "⛈️" },
+    99: { label: "Tormenta con granizo fuerte", icon: "⛈️" }
+  };
+
+  async function loadWeather() {
+    if (!weatherTemp || !weatherDescription || !weatherMax || !weatherMin || !weatherHour || !weatherIcon) {
+      return;
+    }
+
+    try {
+      const geoUrl = "https://geocoding-api.open-meteo.com/v1/search?name=X%C3%A0tiva&count=1&language=es&format=json";
+      const geoResponse = await fetch(geoUrl);
+      if (!geoResponse.ok) throw new Error("No se pudo localizar Xàtiva");
+
+      const geoData = await geoResponse.json();
+      const location = geoData.results && geoData.results[0];
+      const latitude = location ? location.latitude : 38.9895;
+      const longitude = location ? location.longitude : -0.5211;
+
+      const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&forecast_days=1`;
+      const weatherResponse = await fetch(weatherUrl);
+      if (!weatherResponse.ok) throw new Error("No se pudo consultar el tiempo");
+
+      const weather = await weatherResponse.json();
+      const current = weather && weather.current ? weather.current : {};
+      const daily = weather && weather.daily ? weather.daily : {};
+      const code = Number(current.weather_code || 0);
+      const info = weatherCodeMap[code] || { label: "Condición", icon: "🌤️" };
+      const temp = Math.round(current.temperature_2m || 0);
+      const max = Math.round((daily.temperature_2m_max && daily.temperature_2m_max[0]) || temp);
+      const min = Math.round((daily.temperature_2m_min && daily.temperature_2m_min[0]) || temp);
+      const now = new Date();
+
+      weatherIcon.textContent = info.icon;
+      weatherTemp.textContent = `${temp}°C`;
+      weatherDescription.textContent = info.label;
+      weatherMax.textContent = `${max}°C`;
+      weatherMin.textContent = `${min}°C`;
+      weatherHour.textContent = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    } catch (error) {
+      weatherTemp.textContent = "--°C";
+      weatherDescription.textContent = "Sin datos";
+      weatherMax.textContent = "--°C";
+      weatherMin.textContent = "--°C";
+      weatherHour.textContent = "--:--";
+      weatherIcon.textContent = "🌤️";
+      console.error("Error al cargar el tiempo:", error);
+    }
+  }
+
+  loadWeather();
+
   /* ====== Estrellas ====== */
   const starsBox = document.getElementById("stars");
   if (starsBox) {

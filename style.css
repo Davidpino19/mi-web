@@ -233,6 +233,72 @@ section[id],footer[id]{scroll-margin-top:90px}
 .footer-inner{max-width:1120px;margin:0 auto}
 .site-footer h2{font-size:clamp(1.8rem,4.5vw,2.8rem);margin:0 0 .6rem}
 .footer-lead{color:var(--muted);margin:0 0 1.6rem}
+
+.weather-card{
+  margin: 0 0 1.8rem;
+  padding: 1.4rem 1.5rem;
+  border-radius: 22px;
+  border: 1px solid rgba(146,167,255,.16);
+  background: linear-gradient(180deg, rgba(17,27,47,.96), rgba(17,27,47,.7));
+  box-shadow: var(--shadow);
+}
+.weather-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.weather-header h3{margin:0; font-size:1.4rem}
+.weather-kicker{margin:0 0 .3rem !important; font-size:.68rem !important}
+.weather-badge{
+  padding: .45rem .8rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: rgba(110,231,255,.12);
+  border: 1px solid rgba(110,231,255,.18);
+}
+.weather-body{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.weather-main{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.weather-icon{font-size: clamp(2.2rem, 4vw, 3.2rem); line-height:1}
+.weather-temp{font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.05em; line-height:1}
+.weather-description{color: var(--muted); font-weight: 600}
+.weather-meta{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .8rem;
+}
+.weather-meta div{
+  min-width: 90px;
+  padding: .7rem .8rem;
+  border-radius: 14px;
+  border: 1px solid rgba(146,167,255,.12);
+  background: rgba(255,255,255,.02);
+}
+.weather-meta span{
+  display: block;
+  font-size: .7rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.weather-meta strong{
+  font-size: 1.05rem;
+}
 .contact-links{display:flex;gap:.8rem;flex-wrap:wrap;margin:0 0 2rem}
 .contact-btn{display:inline-flex;align-items:center;gap:.55rem;padding:.78rem 1.2rem;border:1px solid var(--border);border-radius:999px;text-decoration:none;font-weight:700;background:linear-gradient(180deg,var(--surface),rgba(255,255,255,.02));transition:transform .2s,border-color .25s,box-shadow .25s,background .25s}
 .contact-btn:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 26px var(--glow);background:linear-gradient(180deg,rgba(122,162,255,.10),rgba(255,255,255,.02))}
