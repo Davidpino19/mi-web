@@ -376,6 +376,33 @@
     </div>
   </footer>
 
+  <div id="chatbot" class="chatbot" aria-live="polite" aria-label="Chatbot de contacto">
+    <div class="chatbot-header">
+      <div class="chatbot-title">
+        <span class="chatbot-badge">🤖</span>
+        <span>Asistente</span>
+      </div>
+      <button id="chatbotClose" type="button" class="chatbot-close" aria-label="Cerrar chatbot">×</button>
+    </div>
+
+    <div id="chatbotMessages" class="chatbot-messages">
+      <div class="message bot">Hola 👋 Soy el asistente de David. Puedo contarte sobre su experiencia, formación, proyectos y cómo contactarle.</div>
+    </div>
+
+    <div class="chatbot-quick-actions">
+      <button class="quick-pill" type="button" data-question="¿Qué experiencia tiene?">Experiencia</button>
+      <button class="quick-pill" type="button" data-question="¿Qué estudia?">Formación</button>
+      <button class="quick-pill" type="button" data-question="¿Cómo puedo contactarle?">Contacto</button>
+    </div>
+
+    <form id="chatbotForm" class="chatbot-form">
+      <input id="chatbotInput" type="text" placeholder="Escribe tu pregunta..." aria-label="Escribe tu pregunta" autocomplete="off" />
+      <button type="submit" aria-label="Enviar mensaje">Enviar</button>
+    </form>
+  </div>
+
+  <button id="chatbotToggle" class="chatbot-toggle" type="button" aria-label="Abrir chatbot">💬</button>
+
   <button id="backToTop" class="back-to-top" type="button" aria-label="Volver al principio">↑</button>
   <canvas id="snow" class="snow-canvas" aria-hidden="true"></canvas>
   <div class="grain" aria-hidden="true"></div>

@@ -327,5 +327,81 @@
     for (const f of flakes) { ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 6.283); ctx.fill();
       f.y += f.s; f.d += 0.01; f.x += Math.sin(f.d) * 0.4; if (f.y > H + 5) { f.y = -5; f.x = Math.random() * W; } }
     requestAnimationFrame(loop); }
-  if (canvas && !reduceMotion) { ctx = canvas.getContext("2d"); if (ctx) { readSnowColor(); resize(); addEventListener("resize", resize); loop(); } else canvas.style.display = "none"; }
+  if (canvas && !reduceMotion) { ctx = canvas.getContext("2d"); if (ctx) { readSnowColor(); resize(); addEventListener("resize", resize); loop(); } else canvas.style.display = "none"; } 
+
+  /* ====== Chatbot ====== */
+  const chatbot = document.getElementById("chatbot");
+  const chatbotToggle = document.getElementById("chatbotToggle");
+  const chatbotClose = document.getElementById("chatbotClose");
+  const chatbotForm = document.getElementById("chatbotForm");
+  const chatbotInput = document.getElementById("chatbotInput");
+  const chatbotMessages = document.getElementById("chatbotMessages");
+
+  function appendMessage(text, sender) {
+    if (!chatbotMessages) return;
+    const div = document.createElement("div");
+    div.className = "message " + sender;
+    div.textContent = text;
+    chatbotMessages.appendChild(div);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }
+
+  function cleanText(value) {
+    return value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+  }
+
+  function getBotReply(message) {
+    const query = cleanText(message);
+
+    if (!query) return "Escribe algo para que pueda ayudarte.";
+    if (query.includes("hola") || query.includes("buenas") || query.includes("saludos")) return "¡Hola! Soy el asistente de David. ¿Quieres saber algo sobre su experiencia, formación o contacto?";
+    if (query.includes("experiencia") || query.includes("trabajo") || query.includes("hosteleria") || query.includes("hostelería")) return "David ha trabajado durante 8 años en hostelería, y esa experiencia le ha ayudado a desarrollar atención al cliente, trabajo bajo presión, organización y trabajo en equipo.";
+    if (query.includes("formacion") || query.includes("estudia") || query.includes("dam") || query.includes("curso")) return "Actualmente está estudiando 1º de Desarrollo de Aplicaciones Multiplataforma (DAM) en el IES Simarro.";
+    if (query.includes("proyecto") || query.includes("proyectos") || query.includes("que hace") || query.includes("habilidades")) return "Su perfil combina formación tecnológica con experiencia real en hostelería, además de interés por el deporte, la música, la tecnología y la creación de proyectos personales.";
+    if (query.includes("contacto") || query.includes("email") || query.includes("correo") || query.includes("mensaje")) return "Puedes contactar con David por correo en daviidpino19@outlook.es. También puedes usar el botón de contacto de la web.";
+    if (query.includes("tecnologia") || query.includes("informatica") || query.includes("software") || query.includes("programacion") || query.includes("programación")) return "David está enfocando su camino hacia la tecnología y el desarrollo, especialmente en el ámbito de DAM y la creación de proyectos digitales.";
+    if (query.includes("deporte") || query.includes("futbol") || query.includes("fútbol")) return "El deporte forma parte de su rutina y de su energía diaria. El fútbol y el ejercicio son parte importante de su día a día.";
+    if (query.includes("quien es") || query.includes("quien eres") || query.includes("quien es david") || query.includes("perfil")) return "David Pino es estudiante de DAM, trabaja con entusiasmo en tecnología y tiene una sólida experiencia en hostelería. También le gusta el deporte, la música y aprender cosas nuevas.";
+    return "Puedo ayudarte con información sobre la experiencia, formación, contacto y perfil de David. Prueba con: experiencia, formación, contacto o proyectos.";
+  }
+
+  function toggleChatbot(forceOpen) {
+    if (!chatbot) return;
+    const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : !chatbot.classList.contains("open");
+    chatbot.classList.toggle("open", shouldOpen);
+    if (shouldOpen && chatbotInput) {
+      setTimeout(() => chatbotInput.focus(), 80);
+    }
+  }
+
+  if (chatbotToggle) {
+    chatbotToggle.addEventListener("click", () => toggleChatbot());
+  }
+
+  if (chatbotClose) {
+    chatbotClose.addEventListener("click", () => toggleChatbot(false));
+  }
+
+  if (chatbotForm) {
+    chatbotForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!chatbotInput) return;
+      const text = chatbotInput.value.trim();
+      if (!text) return;
+      appendMessage(text, "user");
+      const reply = getBotReply(text);
+      chatbotInput.value = "";
+      setTimeout(() => appendMessage(reply, "bot"), 250);
+    });
+  }
+
+  document.querySelectorAll(".quick-pill").forEach((button) => {
+    button.addEventListener("click", () => {
+      const question = button.getAttribute("data-question");
+      if (!question) return;
+      appendMessage(question, "user");
+      setTimeout(() => appendMessage(getBotReply(question), "bot"), 180);
+      toggleChatbot(true);
+    });
+  });
 })();
