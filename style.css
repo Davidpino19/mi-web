@@ -319,6 +319,14 @@ section[id],footer[id]{scroll-margin-top:90px}
 .weather-meta strong{
   font-size: 1.05rem;
 }
+.contact-email{
+  display:inline-flex; align-items:center; gap:.7rem; padding:.8rem 1rem; margin:0 0 1.4rem;
+  border-radius:999px; border:1px solid rgba(110,231,255,.18); background:rgba(110,231,255,.08);
+  box-shadow:0 10px 22px rgba(110,231,255,.08);
+}
+.contact-email span{font-size:1.1rem}
+.contact-email a{color:var(--text); text-decoration:none; font-weight:700}
+.contact-email a:hover,.contact-email a:focus-visible{text-decoration:underline}
 .contact-links{display:flex;gap:.8rem;flex-wrap:wrap;margin:0 0 2rem}
 .contact-btn{display:inline-flex;align-items:center;gap:.55rem;padding:.78rem 1.2rem;border:1px solid var(--border);border-radius:999px;text-decoration:none;font-weight:700;background:linear-gradient(180deg,var(--surface),rgba(255,255,255,.02));transition:transform .2s,border-color .25s,box-shadow .25s,background .25s}
 .contact-btn:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 26px var(--glow);background:linear-gradient(180deg,rgba(122,162,255,.10),rgba(255,255,255,.02))}
