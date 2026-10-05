@@ -228,6 +228,26 @@ section[id],footer[id]{scroll-margin-top:90px}
 .like:hover .like-emoji{transform:scale(1.2) rotate(8deg)}
 .like h3{margin:0 0 .2rem;font-size:1.05rem}.like p{margin:0;color:var(--muted);font-size:.9rem}
 
+.news-section{padding-top:2rem}
+.news-list{list-style:none;padding:0;margin:1.5rem 0 0;display:grid;gap:1rem}
+.news-item{
+  display:flex; flex-direction:column; gap:.5rem;
+  padding:1rem 1.1rem; border-radius:18px;
+  background:linear-gradient(180deg,rgba(17,27,47,.96),rgba(17,27,47,.72));
+  border:1px solid rgba(146,167,255,.12); box-shadow:var(--shadow);
+}
+.news-item a{
+  color:var(--text); text-decoration:none; font-weight:700; line-height:1.45;
+}
+.news-item a:hover,.news-item a:focus-visible{text-decoration:underline}
+.news-item small{color:var(--muted)}
+.news-tag{
+  align-self:flex-start; padding:.35rem .6rem; border-radius:999px;
+  background:rgba(110,231,255,.1); border:1px solid rgba(110,231,255,.18);
+  color:var(--accent); font-size:.7rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+}
+.news-item.loading, .news-item.empty{color:var(--muted); font-weight:600}
+
 /* ====== Pie ====== */
 .site-footer{border-top:1px solid var(--border);padding:4.5rem 1.1rem 2.5rem;background:linear-gradient(180deg,var(--bg),var(--bg-2))}
 .footer-inner{max-width:1120px;margin:0 auto}

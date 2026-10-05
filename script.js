@@ -120,6 +120,44 @@
 
   loadWeather();
 
+  /* ====== Noticias (Hacker News) ====== */
+  const newsList = document.getElementById("newsList");
+
+  async function loadNews() {
+    if (!newsList) return;
+
+    try {
+      const response = await fetch("https://api.rss2json.com/v1/api.json?rss_url=https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada");
+      if (!response.ok) throw new Error("No se pudieron cargar las noticias");
+
+      const data = await response.json();
+      const items = (data.items || []).filter((item) => item.title && item.link).slice(0, 4);
+
+      if (!items.length) {
+        newsList.innerHTML = '<li class="news-item empty">No hay noticias disponibles ahora mismo.</li>';
+        return;
+      }
+
+      newsList.innerHTML = items.map((item) => {
+        const date = new Date(item.pubDate).toLocaleDateString("es-ES", { day: "2-digit", month: "short" });
+        const domain = new URL(item.link).hostname.replace(/^www\./, "");
+
+        return `
+          <li class="news-item">
+            <span class="news-tag">${domain}</span>
+            <a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>
+            <small>${date} · ${item.author || "El País"}</small>
+          </li>
+        `;
+      }).join("");
+    } catch (error) {
+      newsList.innerHTML = '<li class="news-item empty">No se han podido cargar las noticias.</li>';
+      console.error("Error al cargar noticias:", error);
+    }
+  }
+
+  loadNews();
+
   /* ====== Estrellas ====== */
   const starsBox = document.getElementById("stars");
   if (starsBox) {
