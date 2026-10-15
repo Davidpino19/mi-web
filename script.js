@@ -329,6 +329,182 @@
     requestAnimationFrame(loop); }
   if (canvas && !reduceMotion) { ctx = canvas.getContext("2d"); if (ctx) { readSnowColor(); resize(); addEventListener("resize", resize); loop(); } else canvas.style.display = "none"; } 
 
+  /* ====== Menú interactivo tipo juego ====== */
+  const districtButtons = document.querySelectorAll('.district');
+  const missionPanel = document.querySelector('.mission-panel');
+  const missionStatus = document.querySelector('.mission-status');
+  const missionTargetMap = {
+    'sobre-mi': ['Sobre mí', 'Presentar mi historia', 'Zona: Xàtiva'],
+    'mi-recorrido': ['Mi recorrido', 'Contar mi camino', 'Zona: Xàtiva'],
+    'he-hecho': ['Lo que he hecho', 'Mostrar proyectos', 'Zona: Xàtiva'],
+    'contacto': ['Contacto', 'Abrir enlace', 'Zona: Xàtiva']
+  };
+
+  function updateMission(targetId) {
+    const key = missionTargetMap[targetId];
+    if (!key || !missionStatus || !missionPanel) return;
+
+    const [tag, objective, zone] = key;
+    missionStatus.textContent = 'Activa';
+    const panelText = missionPanel.querySelector('.mission-main');
+    if (panelText) {
+      panelText.innerHTML = `
+        <div>
+          <p class="mission-label">Zona</p>
+          <strong>${zone.replace('Zona: ', '')}</strong>
+        </div>
+        <div>
+          <p class="mission-label">Objetivo</p>
+          <strong>${objective}</strong>
+        </div>
+        <div>
+          <p class="mission-label">Misión</p>
+          <strong>${tag}</strong>
+        </div>
+      `;
+    }
+  }
+
+  districtButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const target = button.dataset.target;
+      if (!target) return;
+
+      document.querySelectorAll('.district').forEach((btn) => btn.classList.toggle('active', btn === button));
+      updateMission(target);
+
+      const section = document.getElementById(target);
+      if (section) {
+        section.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  /* ====== Mini juego ====== */
+  const gameStartButton = document.getElementById("gameStart");
+  const gameTarget = document.getElementById("gameTarget");
+  const gameBoard = document.getElementById("gameBoard");
+  const gameScore = document.getElementById("gameScore");
+  const gameTime = document.getElementById("gameTime");
+  const gameBest = document.getElementById("gameBest");
+  const gameMessage = document.getElementById("gameMessage");
+  const leaderboardList = document.getElementById("leaderboardList");
+
+  let gameRunning = false;
+  let gameTimer = null;
+  let gameSeconds = 20;
+  let score = 0;
+  const bestKey = "mi-web-star-game-best";
+  const startingRecord = 47;
+  let bestScore = Number(localStorage.getItem(bestKey) || startingRecord);
+  if (bestScore < startingRecord) {
+    bestScore = startingRecord;
+    try { localStorage.setItem(bestKey, String(bestScore)); } catch (e) {}
+  }
+
+  function renderLeaderboard() {
+    if (!leaderboardList) return;
+
+    const userBest = Math.max(Number(localStorage.getItem(bestKey) || 0), 0);
+    const entries = [
+      { name: "David Pino", score: startingRecord },
+      { name: "Alex", score: 28 },
+      { name: "Marta", score: 21 }
+    ];
+
+    if (userBest > 0 && userBest > startingRecord) {
+      entries.push({ name: "Tú", score: userBest });
+    }
+
+    const sorted = [...entries].sort((a, b) => b.score - a.score);
+
+    leaderboardList.innerHTML = sorted.map((entry, index) => {
+      const isTop = index === 0;
+      return `
+        <li class="leaderboard-item ${isTop ? "leaderboard-top" : ""}">
+          <span class="leaderboard-rank">#${index + 1}</span>
+          <span class="leaderboard-name">${entry.name}</span>
+          <strong class="leaderboard-score">${entry.score}</strong>
+        </li>
+      `;
+    }).join("");
+  }
+
+  function updateGameStats() {
+    if (gameScore) gameScore.textContent = String(score);
+    if (gameTime) gameTime.textContent = String(gameSeconds);
+    if (gameBest) gameBest.textContent = String(Math.max(bestScore, score));
+    renderLeaderboard();
+  }
+
+  function moveTarget() {
+    if (!gameTarget || !gameBoard) return;
+    const boardWidth = gameBoard.clientWidth - gameTarget.offsetWidth;
+    const boardHeight = gameBoard.clientHeight - gameTarget.offsetHeight;
+    const nextX = Math.max(0, Math.random() * boardWidth);
+    const nextY = Math.max(0, Math.random() * boardHeight);
+    gameTarget.style.left = `${nextX}px`;
+    gameTarget.style.top = `${nextY}px`;
+  }
+
+  function finishGame() {
+    if (!gameRunning) return;
+    gameRunning = false;
+    if (gameTimer) clearInterval(gameTimer);
+    if (score > bestScore) {
+      bestScore = score;
+      try { localStorage.setItem(bestKey, String(bestScore)); } catch (e) {}
+    }
+    updateGameStats();
+    if (gameMessage) gameMessage.textContent = score === 0 ? "Se acabó el tiempo. ¡Prueba otra vez!" : `¡Fin del juego! Has marcado ${score} puntos.`;
+    if (gameTarget) gameTarget.style.opacity = "0.2";
+  }
+
+  function startGame() {
+    gameRunning = true;
+    score = 0;
+    gameSeconds = 20;
+    updateGameStats();
+    if (gameTarget) gameTarget.style.opacity = "1";
+    if (gameMessage) gameMessage.textContent = "¡A por la estrella!";
+    moveTarget();
+
+    if (gameTimer) clearInterval(gameTimer);
+    gameTimer = setInterval(() => {
+      if (!gameRunning) return;
+      gameSeconds -= 1;
+      updateGameStats();
+      if (gameSeconds <= 0) {
+        finishGame();
+      }
+    }, 1000);
+  }
+
+  if (gameStartButton) {
+    gameStartButton.addEventListener("click", startGame);
+  }
+
+  if (gameTarget) {
+    gameTarget.addEventListener("click", () => {
+      if (!gameRunning) return;
+      score += 1;
+      updateGameStats();
+      if (gameMessage) gameMessage.textContent = "¡Perfecto! Sigue así.";
+      moveTarget();
+    });
+  }
+
+  if (gameBoard) {
+    window.addEventListener("resize", () => {
+      if (gameRunning && gameTarget) {
+        moveTarget();
+      }
+    });
+  }
+
+  updateGameStats();
+  renderLeaderboard();
+
   /* ====== Chatbot ====== */
   const chatbot = document.getElementById("chatbot");
   const chatbotToggle = document.getElementById("chatbotToggle");

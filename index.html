@@ -47,6 +47,31 @@
     </div>
   </header>
 
+  <div class="game-menu" aria-label="Menú de misiones">
+    <div class="game-menu-header">
+      <span class="game-menu-title">Mapa de la ciudad</span>
+      <span class="game-menu-badge">ONLINE</span>
+    </div>
+    <div class="game-menu-map">
+      <button class="district active" type="button" data-target="sobre-mi">
+        <span class="district-dot"></span>
+        <span>Sobre mí</span>
+      </button>
+      <button class="district" type="button" data-target="mi-recorrido">
+        <span class="district-dot"></span>
+        <span>Recorrido</span>
+      </button>
+      <button class="district" type="button" data-target="he-hecho">
+        <span class="district-dot"></span>
+        <span>Proyectos</span>
+      </button>
+      <button class="district" type="button" data-target="contacto">
+        <span class="district-dot"></span>
+        <span>Contacto</span>
+      </button>
+    </div>
+  </div>
+
   <main id="inicio">
 
     <!-- ===================== HERO: escena de los Pirineos ===================== -->
@@ -68,11 +93,32 @@
       <div class="spotlight" id="spotlight" aria-hidden="true"></div>
 
       <div class="hero-inner">
+        <div class="mission-panel" aria-live="polite">
+          <div class="mission-meta">
+            <span class="mission-tag">Misión</span>
+            <span class="mission-status">Activa</span>
+          </div>
+          <div class="mission-main">
+            <div>
+              <p class="mission-label">Zona</p>
+              <strong>Xàtiva</strong>
+            </div>
+            <div>
+              <p class="mission-label">Objetivo</p>
+              <strong>Presentar mi historia</strong>
+            </div>
+            <div>
+              <p class="mission-label">Nivel</p>
+              <strong>1º DAM</strong>
+            </div>
+          </div>
+        </div>
+
         <span class="status-chip"><span class="dot"></span> Aprendiendo, creando y moviéndome</span>
         <p class="eyebrow">Estudiante de DAM · IES Simarro</p>
         <h1>David <span class="name-accent">Pino</span></h1>
-        <p class="lead">“No busco encajar en una sola caja: me mueve la tecnología, el deporte, la montaña y la curiosidad.”</p>
-        <p class="hero-sub">Soy alguien con una mezcla de energía, rutina y ganas de construir cosas. Me gusta aprender rápido, meterme en proyectos, viajar, seguir creciendo y encontrarle sentido a todo lo que hago.</p>
+        <p class="lead">“Bienvenido a mi ciudad: tecnología, deporte, montaña y ganas de construir algo grande.”</p>
+        <p class="hero-sub">Soy David, una mezcla de energía, constancia y curiosidad. Me gusta aprender rápido, moverme en proyectos, dejar huella y convertir cada reto en una nueva misión.</p>
 
         <div class="hero-actions">
           <a class="btn btn-primary" href="#sobre-mi">Sobre mí</a>
@@ -340,6 +386,66 @@
           <li class="like reveal"><span class="like-emoji">💻</span><h3>Tecnología</h3><p>Mi futuro.</p></li>
           <li class="like reveal"><span class="like-emoji">🖥️</span><h3>PC</h3><p>Potente y sudada.</p></li>
         </ul>
+      </div>
+    </section>
+
+    <section id="juego" class="section game-section">
+      <div class="section-inner">
+        <p class="kicker reveal">Mini juego</p>
+        <h2 class="reveal">Atrapa la <span class="hl">estrella</span></h2>
+
+        <div class="game-layout reveal">
+          <div class="game-panel">
+            <div class="game-stats">
+              <div class="game-stat">
+                <span>Puntuación</span>
+                <strong id="gameScore">0</strong>
+              </div>
+              <div class="game-stat">
+                <span>Tiempo</span>
+                <strong id="gameTime">20</strong>
+              </div>
+              <div class="game-stat">
+                <span>Máx.</span>
+                <strong id="gameBest">0</strong>
+              </div>
+            </div>
+
+            <div class="game-board" id="gameBoard" aria-label="Tablero del juego">
+              <button id="gameTarget" class="game-target" type="button" aria-label="Objetivo del juego">✦</button>
+            </div>
+
+            <div class="game-controls">
+              <button id="gameStart" class="btn btn-primary" type="button">Empezar</button>
+              <p id="gameMessage" class="game-message">Haz clic en empezar para jugar.</p>
+            </div>
+          </div>
+
+          <aside class="leaderboard-panel" aria-label="Tabla de clasificación">
+            <div class="leaderboard-header">
+              <span class="leaderboard-badge">Ranking</span>
+              <h3>Clasificación</h3>
+            </div>
+
+            <ol class="leaderboard-list" id="leaderboardList">
+              <li class="leaderboard-item leaderboard-top">
+                <span class="leaderboard-rank">#1</span>
+                <span class="leaderboard-name">David Pino</span>
+                <strong class="leaderboard-score">47</strong>
+              </li>
+              <li class="leaderboard-item">
+                <span class="leaderboard-rank">#2</span>
+                <span class="leaderboard-name">Alex</span>
+                <strong class="leaderboard-score">28</strong>
+              </li>
+              <li class="leaderboard-item">
+                <span class="leaderboard-rank">#3</span>
+                <span class="leaderboard-name">Marta</span>
+                <strong class="leaderboard-score">21</strong>
+              </li>
+            </ol>
+          </aside>
+        </div>
       </div>
     </section>
 
