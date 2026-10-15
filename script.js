@@ -202,17 +202,29 @@
   function queue() { if (!ticking && heroVisible) { ticking = true; requestAnimationFrame(paint); } }
 
   if (!reduceMotion) {
-    window.addEventListener("scroll", () => { sy = window.scrollY; queue(); }, { passive: true });
-    if (hero) hero.addEventListener("mousemove", (e) => {
-      const r = hero.getBoundingClientRect();
-      mx = (e.clientX - r.left) / r.width - 0.5;
-      my = (e.clientY - r.top) / r.height - 0.5;
-      if (spotlight) {
-        spotlight.style.setProperty("--mx", ((mx + 0.5) * 100) + "%");
-        spotlight.style.setProperty("--my", ((my + 0.5) * 100) + "%");
-      }
+    window.addEventListener("scroll", () => {
+      sy = window.scrollY;
       queue();
-    });
+    }, { passive: true });
+
+    if (hero) {
+      let pointerScheduled = false;
+      hero.addEventListener("mousemove", (e) => {
+        if (pointerScheduled) return;
+        pointerScheduled = true;
+        requestAnimationFrame(() => {
+          const r = hero.getBoundingClientRect();
+          mx = (e.clientX - r.left) / r.width - 0.5;
+          my = (e.clientY - r.top) / r.height - 0.5;
+          if (spotlight) {
+            spotlight.style.setProperty("--mx", ((mx + 0.5) * 100) + "%");
+            spotlight.style.setProperty("--my", ((my + 0.5) * 100) + "%");
+          }
+          queue();
+          pointerScheduled = false;
+        });
+      });
+    }
     if ("IntersectionObserver" in window && hero) {
       new IntersectionObserver((es) => { heroVisible = es[0].isIntersecting; }, { threshold: 0 })
         .observe(hero);
@@ -279,11 +291,17 @@
   let cursorX = window.innerWidth / 2, cursorY = window.innerHeight / 2;
 
   if (cursorDot && cursorRing && !reduceMotion) {
+    let cursorScheduled = false;
     document.addEventListener('pointermove', (event) => {
-      cursorX = event.clientX;
-      cursorY = event.clientY;
-      cursorDot.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
-      cursorRing.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+      if (cursorScheduled) return;
+      cursorScheduled = true;
+      requestAnimationFrame(() => {
+        cursorX = event.clientX;
+        cursorY = event.clientY;
+        cursorDot.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+        cursorRing.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+        cursorScheduled = false;
+      });
     });
 
     document.addEventListener('pointerdown', () => {
@@ -321,13 +339,17 @@
   let ctx, flakes = [], W = 0, H = 0;
   function readSnowColor() { snowColor = (getComputedStyle(root).getPropertyValue("--snow") || "").trim() || "rgba(255,255,255,.85)"; }
   function resize() { if (!canvas) return; W = canvas.width = innerWidth; H = canvas.height = innerHeight;
-    const n = Math.min(90, Math.floor(W / 16));
-    flakes = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 2.4 + 0.6, s: Math.random() * 0.7 + 0.25, d: Math.random() * Math.PI * 2 })); }
-  function loop() { if (!ctx) return; ctx.clearRect(0, 0, W, H); ctx.fillStyle = snowColor;
-    for (const f of flakes) { ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 6.283); ctx.fill();
-      f.y += f.s; f.d += 0.01; f.x += Math.sin(f.d) * 0.4; if (f.y > H + 5) { f.y = -5; f.x = Math.random() * W; } }
-    requestAnimationFrame(loop); }
-  if (canvas && !reduceMotion) { ctx = canvas.getContext("2d"); if (ctx) { readSnowColor(); resize(); addEventListener("resize", resize); loop(); } else canvas.style.display = "none"; } 
+    const n = Math.min(40, Math.floor(W / 24));
+    flakes = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 2.1 + 0.5, s: Math.random() * 0.6 + 0.2, d: Math.random() * Math.PI * 2 })); }
+  function loop(ts) { if (!ctx) return; ctx.clearRect(0, 0, W, H); ctx.fillStyle = snowColor;
+    for (const f of flakes) {
+      ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 6.283); ctx.fill();
+      f.y += f.s; f.d += 0.01; f.x += Math.sin(f.d) * 0.35;
+      if (f.y > H + 5) { f.y = -5; f.x = Math.random() * W; }
+    }
+    requestAnimationFrame(loop);
+  }
+  if (canvas && !reduceMotion) { ctx = canvas.getContext("2d"); if (ctx) { readSnowColor(); resize(); addEventListener("resize", resize); requestAnimationFrame(loop); } else canvas.style.display = "none"; }
 
   /* ====== Menú interactivo tipo juego ====== */
   const districtButtons = document.querySelectorAll('.district');
@@ -392,7 +414,7 @@
 
   let gameRunning = false;
   let gameTimer = null;
-  let gameSeconds = 20;
+  let gameSeconds = 15;
   let score = 0;
   const bestKey = "mi-web-star-game-best";
   const startingRecord = 47;
@@ -439,12 +461,17 @@
 
   function moveTarget() {
     if (!gameTarget || !gameBoard) return;
-    const boardWidth = gameBoard.clientWidth - gameTarget.offsetWidth;
-    const boardHeight = gameBoard.clientHeight - gameTarget.offsetHeight;
-    const nextX = Math.max(0, Math.random() * boardWidth);
-    const nextY = Math.max(0, Math.random() * boardHeight);
-    gameTarget.style.left = `${nextX}px`;
-    gameTarget.style.top = `${nextY}px`;
+
+    const targetSize = gameTarget.offsetWidth || 56;
+    const padding = 16;
+    const usableWidth = Math.max(10, gameBoard.clientWidth - targetSize - padding * 2);
+    const usableHeight = Math.max(10, gameBoard.clientHeight - targetSize - padding * 2);
+    const nextX = padding + Math.random() * usableWidth;
+    const nextY = padding + Math.random() * usableHeight;
+
+    gameTarget.style.left = `${nextX + targetSize / 2}px`;
+    gameTarget.style.top = `${nextY + targetSize / 2}px`;
+    gameTarget.style.transform = "translate(-50%, -50%) scale(1)";
   }
 
   function finishGame() {
@@ -463,16 +490,19 @@
   function startGame() {
     gameRunning = true;
     score = 0;
-    gameSeconds = 20;
+    gameSeconds = 15;
     updateGameStats();
-    if (gameTarget) gameTarget.style.opacity = "1";
+    if (gameTarget) {
+      gameTarget.style.opacity = "1";
+      gameTarget.style.filter = "drop-shadow(0 0 18px rgba(255, 145, 77, 0.85))";
+    }
     if (gameMessage) gameMessage.textContent = "¡A por la estrella!";
     moveTarget();
 
     if (gameTimer) clearInterval(gameTimer);
     gameTimer = setInterval(() => {
       if (!gameRunning) return;
-      gameSeconds -= 1;
+      gameSeconds = Math.max(0, gameSeconds - 1);
       updateGameStats();
       if (gameSeconds <= 0) {
         finishGame();
@@ -485,11 +515,18 @@
   }
 
   if (gameTarget) {
-    gameTarget.addEventListener("click", () => {
+    gameTarget.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
       if (!gameRunning) return;
       score += 1;
       updateGameStats();
-      if (gameMessage) gameMessage.textContent = "¡Perfecto! Sigue así.";
+      if (gameMessage) gameMessage.textContent = score >= 10 ? "¡Modo arcade! 🔥" : "¡Perfecto! Sigue así.";
+      gameTarget.style.transform = "translate(-50%, -50%) scale(1.15)";
+      setTimeout(() => {
+        if (gameTarget && gameRunning) {
+          gameTarget.style.transform = "translate(-50%, -50%) scale(1)";
+        }
+      }, 80);
       moveTarget();
     });
   }
