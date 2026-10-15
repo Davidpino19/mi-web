@@ -234,18 +234,14 @@
   /* ====== Tarjetas inclinadas ====== */
   if (canHover && !reduceMotion) {
     document.querySelectorAll(".card").forEach((card) => {
-      card.addEventListener("mousemove", (e) => {
-        const r = card.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
-        card.style.transform = "perspective(800px) rotateX(" + ((0.5 - py) * 10) + "deg) rotateY(" + ((px - 0.5) * 12) + "deg) translateY(-4px)";
-        card.style.setProperty("--cx", (px * 100) + "%");
-        card.style.setProperty("--cy", (py * 100) + "%");
+      card.addEventListener("mouseenter", () => {
+        card.style.transform = "translateY(-3px)";
       });
       card.addEventListener("mouseleave", () => { card.style.transform = ""; });
     });
   }
 
-  /* ====== Reveal (robusto: si falla, todo queda visible) ====== */
+  /* Microinteracción 1: aparición al hacer scroll */
   const revealEls = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
   if ("IntersectionObserver" in window && !reduceMotion) {
     revealEls.forEach((el) => el.classList.add("js-reveal"));
@@ -255,6 +251,45 @@
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
     revealEls.forEach((el) => io.observe(el));
+  }
+
+  /* Microinteracción 3: contador animado */
+  const countEls = Array.prototype.slice.call(document.querySelectorAll(".count-up"));
+  if (countEls.length && !reduceMotion) {
+    const countObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = Number(el.dataset.target || 0);
+        const suffix = el.dataset.suffix || "";
+        const duration = 1000;
+        const start = performance.now();
+
+        const tick = (time) => {
+          const progress = Math.min((time - start) / duration, 1);
+          const value = Math.round(target * progress);
+          el.textContent = value + suffix;
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            el.textContent = target + suffix;
+          }
+        };
+
+        requestAnimationFrame(tick);
+        countObserver.unobserve(el);
+      });
+    }, { threshold: 0.3 });
+
+    countEls.forEach((el) => {
+      el.textContent = "0" + (el.dataset.suffix || "");
+      countObserver.observe(el);
+    });
+  } else {
+    countEls.forEach((el) => {
+      const suffix = el.dataset.suffix || "";
+      el.textContent = (Number(el.dataset.target || 0)) + suffix;
+    });
   }
 
   /* ====== Scrollspy ====== */
@@ -285,53 +320,12 @@
   window.addEventListener("resize", paintProgress);
   paintProgress();
 
-  /* ====== Cursor original ====== */
+  /* ====== Cursor ====== */
   const cursorDot = document.querySelector('.cursor-dot');
   const cursorRing = document.querySelector('.cursor-ring');
-  let cursorX = window.innerWidth / 2, cursorY = window.innerHeight / 2;
-
-  if (cursorDot && cursorRing && !reduceMotion) {
-    let cursorScheduled = false;
-    document.addEventListener('pointermove', (event) => {
-      if (cursorScheduled) return;
-      cursorScheduled = true;
-      requestAnimationFrame(() => {
-        cursorX = event.clientX;
-        cursorY = event.clientY;
-        cursorDot.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
-        cursorRing.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
-        cursorScheduled = false;
-      });
-    });
-
-    document.addEventListener('pointerdown', () => {
-      cursorDot.style.width = '18px';
-      cursorDot.style.height = '18px';
-      cursorRing.style.width = '46px';
-      cursorRing.style.height = '46px';
-    });
-
-    document.addEventListener('pointerup', () => {
-      cursorDot.style.width = '10px';
-      cursorDot.style.height = '10px';
-      cursorRing.style.width = '32px';
-      cursorRing.style.height = '32px';
-    });
-
-    document.querySelectorAll('a, button, .card, .like').forEach((el) => {
-      el.addEventListener('mouseenter', () => {
-        cursorRing.style.width = '42px';
-        cursorRing.style.height = '42px';
-        cursorDot.style.width = '14px';
-        cursorDot.style.height = '14px';
-      });
-      el.addEventListener('mouseleave', () => {
-        cursorRing.style.width = '32px';
-        cursorRing.style.height = '32px';
-        cursorDot.style.width = '10px';
-        cursorDot.style.height = '10px';
-      });
-    });
+  if (cursorDot && cursorRing) {
+    cursorDot.remove();
+    cursorRing.remove();
   }
 
   /* ====== Nieve ====== */
@@ -418,10 +412,9 @@
   let score = 0;
   const bestKey = "mi-web-star-game-best";
   const startingRecord = 47;
-  let bestScore = Number(localStorage.getItem(bestKey) || startingRecord);
-  if (bestScore < startingRecord) {
-    bestScore = startingRecord;
-    try { localStorage.setItem(bestKey, String(bestScore)); } catch (e) {}
+  let bestScore = Number(localStorage.getItem(bestKey) || 0);
+  if (!Number.isFinite(bestScore) || bestScore < 0) {
+    bestScore = 0;
   }
 
   function renderLeaderboard() {
@@ -434,7 +427,7 @@
       { name: "Marta", score: 21 }
     ];
 
-    if (userBest > 0 && userBest > startingRecord) {
+    if (userBest > 0) {
       entries.push({ name: "Tú", score: userBest });
     }
 

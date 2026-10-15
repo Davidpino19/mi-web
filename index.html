@@ -24,7 +24,18 @@
   <header class="site-header">
     <div class="header-inner">
       <a href="#inicio" class="brand" aria-label="Ir al inicio">
-        <span class="brand-mark" aria-hidden="true">▲</span> David&nbsp;Pino
+        <svg class="brand-logo" viewBox="0 0 120 120" role="img" aria-label="Logo DP">
+          <defs>
+            <linearGradient id="dpGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+              <stop offset="0%" stop-color="#6ee7ff" />
+              <stop offset="45%" stop-color="#8b5cf6" />
+              <stop offset="100%" stop-color="#ff7f50" />
+            </linearGradient>
+          </defs>
+          <rect x="8" y="8" width="104" height="104" rx="26" fill="url(#dpGradient)"/>
+          <path d="M36 24v72M36 24h25c22 0 33 12 33 36s-11 36-33 36H36" fill="none" stroke="#0b1220" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M68 24v72M68 24h17c13 0 23 8 23 20s-10 20-23 20H68" fill="none" stroke="#0b1220" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </a>
 
       <nav aria-label="Navegación principal">
@@ -211,15 +222,15 @@
 
           <div class="stats-strip reveal" aria-label="Habilidades profesionales">
             <div>
-              <strong>8</strong>
+              <strong class="count-up" data-target="8">0</strong>
               <span>años</span>
             </div>
             <div>
-              <strong>3</strong>
+              <strong class="count-up" data-target="3">0</strong>
               <span>pilares</span>
             </div>
             <div>
-              <strong>100%</strong>
+              <strong class="count-up" data-target="100" data-suffix="%">0</strong>
               <span>equipo</span>
             </div>
           </div>
@@ -355,31 +366,71 @@
         </div>
 
         <ul class="likes">
-          <li class="like reveal"><span class="like-emoji">⚽</span><h3>Fútbol</h3><p>Mi pasión deportiva.</p></li>
-          <li class="like reveal"><span class="like-emoji">🏃</span><h3>Deporte</h3><p>Siempre activo.</p></li>
+          <li class="like reveal">
+            <svg class="like-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 4l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 8l8 8M16 8l-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <h3>Fútbol</h3>
+            <p>Mi pasión deportiva.</p>
+          </li>
+          <li class="like reveal">
+            <svg class="like-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 9h3v6H4zm13 0h3v6h-3zM7 12h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 6v12M15 6v12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <h3>Deporte</h3>
+            <p>Siempre activo.</p>
+          </li>
           <li class="like reveal">
             <a class="like-link" href="https://open.spotify.com/user/davidpino" target="_blank" rel="noopener noreferrer" aria-label="Ir a mi perfil de Spotify">
-              <span class="like-emoji">🎧</span>
+              <svg class="like-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 18V6l10-2v12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="7" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="17" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
+              </svg>
               <h3>Música</h3>
               <p>Mi perfil de Spotify.</p>
             </a>
           </li>
           <li class="like reveal">
             <a class="like-link" href="https://lichess.org/" target="_blank" rel="noopener noreferrer" aria-label="Jugar al ajedrez en Lichess">
-              <span class="like-emoji">♟️</span>
+              <svg class="like-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 19h10M8 8h8M10 8V5h4v3M10 8l-1 5h6l-1-5M11 13v6M13 13v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="4" r="1.2" fill="currentColor" stroke="none"/>
+              </svg>
               <h3>Ajedrez</h3>
               <p>Jugar online.</p>
             </a>
           </li>
           <li class="like reveal">
             <a class="like-link" href="https://letterboxd.com/davidpino19/" target="_blank" rel="noopener noreferrer" aria-label="Ir a mi Letterboxd">
-              <span class="like-emoji">🎬</span>
+              <svg class="like-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="4" y="5" width="16" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M8 9h8M8 13h6M8 17h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
               <h3>Cine</h3>
               <p>Películas y series.</p>
             </a>
           </li>
-          <li class="like reveal"><span class="like-emoji">💻</span><h3>Tecnología</h3><p>Mi futuro.</p></li>
-          <li class="like reveal"><span class="like-emoji">🖥️</span><h3>PC</h3><p>Potente y sudada.</p></li>
+          <li class="like reveal">
+            <svg class="like-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 7V5h8v2M8 7h8M8 7l-2 10h12l-2-10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 12h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <h3>Tecnología</h3>
+            <p>Mi futuro.</p>
+          </li>
+          <li class="like reveal">
+            <svg class="like-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 10h8M8 14h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 14h1v2h-1z" fill="currentColor" stroke="none"/>
+            </svg>
+            <h3>PC</h3>
+            <p>Potente y sudada.</p>
+          </li>
         </ul>
       </div>
     </section>
