@@ -414,7 +414,7 @@
 
   let gameRunning = false;
   let gameTimer = null;
-  let gameSeconds = 15;
+  let gameSeconds = 20;
   let score = 0;
   const bestKey = "mi-web-star-game-best";
   const startingRecord = 47;
@@ -490,7 +490,7 @@
   function startGame() {
     gameRunning = true;
     score = 0;
-    gameSeconds = 15;
+    gameSeconds = 20;
     updateGameStats();
     if (gameTarget) {
       gameTarget.style.opacity = "1";
