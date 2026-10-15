@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-label="favicon DP">
+  <defs>
+    <linearGradient id="dpBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6ee7ff"/>
+      <stop offset="52%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#ff8a65"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0.6" y="0.6" width="14.8" height="14.8" rx="3.6" fill="#08111b"/>
+  <rect x="1.2" y="1.2" width="13.6" height="13.6" rx="3.2" fill="url(#dpBg)" opacity="0.9"/>
+
+  <path d="M4.3 2.8v10.4M4.3 2.8h3.3c2.5 0 4.1 1.3 4.1 3.9 0 2.6-1.6 3.9-4.1 3.9H4.3" fill="none" stroke="#08111b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M8.8 2.8v10.4M8.8 2.8h2.2c1.7 0 2.9 1 2.9 2.7 0 1.8-1.2 2.7-2.9 2.7H8.8" fill="none" stroke="#08111b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
