@@ -567,6 +567,48 @@
         </div>
       </div>
 
+      <div class="demo-login reveal">
+        <div class="demo-login-header">
+          <div>
+            <p class="feedback-kicker">Zona privada</p>
+            <h3>Demo de acceso interno</h3>
+          </div>
+          <span class="feedback-badge">Estado</span>
+        </div>
+
+        <form id="demoLoginForm" class="demo-login-form">
+          <div class="field-row">
+            <label>
+              <span>Usuario</span>
+              <input type="text" id="demoUser" name="demoUser" placeholder="david" required />
+            </label>
+            <label>
+              <span>Contraseña</span>
+              <input type="password" id="demoPassword" name="demoPassword" placeholder="••••••••" required />
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Entrar</button>
+            <button type="button" id="demoLogout" class="btn btn-ghost">Salir</button>
+          </div>
+        </form>
+
+        <div id="demoLoginStatus" class="feedback-response" aria-live="polite">
+          Prueba con usuario <strong>david</strong> y contraseña <strong>dam2026</strong> para ver la zona privada.
+        </div>
+
+        <div id="privateZone" class="private-zone" hidden>
+          <h4>Zona interna activa</h4>
+          <p>Bienvenido, <strong id="privateUserName">David</strong>. La sesión está guardada en el navegador.</p>
+          <ul>
+            <li>La autenticación cambia el estado visual de la página.</li>
+            <li>Se usa localStorage para recordar la sesión.</li>
+            <li>La web personaliza el contenido según el usuario conectado.</li>
+          </ul>
+        </div>
+      </div>
+
       <div class="contact-email reveal">
         <span>📧</span>
         <a href="mailto:daviidpino19@outlook.es?subject=Contacto%20desde%20tu%20web&body=Hola%20David%2C%0A%0AQuiero%20ponerme%20en%20contacto%20contigo.%0A%0A">daviidpino19@outlook.es</a>

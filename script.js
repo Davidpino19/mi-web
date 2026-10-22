@@ -345,6 +345,79 @@
     secs.forEach((s) => so.observe(s));
   }
 
+  /* ====== Login demo con zona privada ====== */
+  const demoLoginStateKey = "mi-web-demo-login";
+  const demoLoginForm = document.getElementById("demoLoginForm");
+  const demoUserInput = document.getElementById("demoUser");
+  const demoPasswordInput = document.getElementById("demoPassword");
+  const demoLoginStatus = document.getElementById("demoLoginStatus");
+  const demoLogoutButton = document.getElementById("demoLogout");
+  const privateZone = document.getElementById("privateZone");
+  const privateUserName = document.getElementById("privateUserName");
+
+  function renderDemoLoginState() {
+    if (!demoLoginForm || !demoLoginStatus || !privateZone || !privateUserName) return;
+
+    try {
+      const raw = localStorage.getItem(demoLoginStateKey);
+      const session = raw ? JSON.parse(raw) : null;
+      const loggedIn = !!(session && session.loggedIn && session.username === "david");
+
+      demoLoginForm.style.display = loggedIn ? "none" : "grid";
+      privateZone.hidden = !loggedIn;
+
+      if (loggedIn) {
+        const user = session.username || "David";
+        privateUserName.textContent = user.charAt(0).toUpperCase() + user.slice(1);
+        demoLoginStatus.classList.add("success");
+        demoLoginStatus.classList.remove("warning");
+        demoLoginStatus.innerHTML = `Sesión activa: <strong>${privateUserName.textContent}</strong> está dentro de la zona privada.`;
+      } else {
+        demoLoginStatus.classList.remove("success");
+        demoLoginStatus.classList.add("warning");
+        demoLoginStatus.innerHTML = 'Prueba con usuario <strong>david</strong> y contraseña <strong>dam2026</strong> para ver la zona privada.';
+      }
+    } catch (error) {
+      console.error("Error al leer la sesión demo:", error);
+    }
+  }
+
+  function setDemoLoginSession(username) {
+    const session = { username: username.toLowerCase(), loggedIn: true, savedAt: Date.now() };
+    localStorage.setItem(demoLoginStateKey, JSON.stringify(session));
+    renderDemoLoginState();
+  }
+
+  if (demoLoginForm) {
+    demoLoginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!demoUserInput || !demoPasswordInput || !demoLoginStatus) return;
+
+      const username = (demoUserInput.value || "").trim().toLowerCase();
+      const password = (demoPasswordInput.value || "").trim();
+
+      if (username === "david" && password === "dam2026") {
+        setDemoLoginSession(username);
+        demoLoginForm.reset();
+      } else {
+        demoLoginStatus.classList.remove("success");
+        demoLoginStatus.classList.add("warning");
+        demoLoginStatus.textContent = "Credenciales incorrectas. Vuelve a intentarlo.";
+      }
+    });
+  }
+
+  if (demoLogoutButton) {
+    demoLogoutButton.addEventListener("click", () => {
+      localStorage.removeItem(demoLoginStateKey);
+      renderDemoLoginState();
+      if (demoUserInput) demoUserInput.value = "";
+      if (demoPasswordInput) demoPasswordInput.value = "";
+    });
+  }
+
+  renderDemoLoginState();
+
   /* ====== Volver arriba ====== */
   const top = document.getElementById("backToTop");
   window.addEventListener("scroll", () => { if (top) top.classList.toggle("show", window.scrollY > 480); }, { passive: true });

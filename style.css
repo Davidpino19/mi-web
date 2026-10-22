@@ -396,6 +396,22 @@ section[id],footer[id]{scroll-margin-top:90px}
 .feedback-response.success{border-color:rgba(122,255,180,.28);background:rgba(122,255,180,.08)}
 .feedback-response.warning{border-color:rgba(255,202,74,.26);background:rgba(255,202,74,.08)}
 
+.demo-login{
+  margin: 0 0 1.6rem;
+  padding: 1.4rem;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(17,27,47,.96), rgba(17,27,47,.74));
+  border: 1px solid rgba(146,167,255,.16);
+  box-shadow: var(--shadow);
+}
+.demo-login-header{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1rem}
+.demo-login-header h3{margin:0;font-size:1.35rem}
+.demo-login-form{display:grid;gap:1rem}
+.private-zone{margin-top:1rem;padding:1rem;border-radius:16px;background:rgba(122,255,180,.08);border:1px solid rgba(122,255,180,.22)}
+.private-zone h4{margin:0 0 .5rem;font-size:1.1rem}
+.private-zone ul{margin:.6rem 0 0;padding-left:1.2rem;color:var(--text);line-height:1.7}
+.private-zone[hidden]{display:none}
+
 .weather-card{
   margin: 0 0 1.8rem;
   padding: 1.4rem 1.5rem;
