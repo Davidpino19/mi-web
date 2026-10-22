@@ -663,45 +663,32 @@
   }
 
   const centerAiConfig = {
-    baseURL: "https://ia.simarro/llmapi/v1",
-    apiKey: "TU_CLAVE_API",
+    endpoint: "/api/chat",
     model: "simarro/Qwen38-DualSpark-medium",
   };
 
   async function askCenterAi(userMessage) {
-    if (!centerAiConfig.apiKey || centerAiConfig.apiKey === "TU_CLAVE_API") {
-      return null;
-    }
-
     try {
-      const response = await fetch(`${centerAiConfig.baseURL}/chat/completions`, {
+      const response = await fetch(centerAiConfig.endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${centerAiConfig.apiKey}`,
         },
         body: JSON.stringify({
+          message: userMessage,
           model: centerAiConfig.model,
-          messages: [
-            {
-              role: "system",
-              content: "Eres David Pino, un estudiante de 1º de DAM del IES Simarro. Responde en español como si fueras él, con un tono natural, cercano, claro y profesional. Habla en primera persona, explica su formación, experiencia en hostelería, interés por la tecnología, el deporte, la música y su perfil personal. Si te preguntan por contacto, indica que puedes escribir a daviidpino19@outlook.es y visitar su perfil de LinkedIn. No inventes cosas que no estén en su perfil."
-            },
-            { role: "user", content: userMessage }
-          ],
-          temperature: 0.7,
-          max_tokens: 350
         })
       });
 
       if (!response.ok) {
-        throw new Error("La API del centro no respondió correctamente.");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "La API del centro no respondió correctamente.");
       }
 
       const data = await response.json();
-      const answer = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content ? data.choices[0].message.content : "";
+      const answer = data && data.reply ? data.reply : "";
       if (!answer) {
-        throw new Error("La API no devolvió texto válido.");
+        throw new Error("La IA no devolvió texto válido.");
       }
 
       return answer.trim();
