@@ -120,18 +120,53 @@
 
   loadWeather();
 
-  /* ====== Noticias (Hacker News) ====== */
+  /* ====== Noticias (RSS directo) ====== */
   const newsList = document.getElementById("newsList");
+  const newsFeedUrl = "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada";
+
+  function parseNewsItems(xmlText) {
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(xmlText, "application/xml");
+    const parserError = xml.querySelector("parsererror");
+
+    if (parserError) {
+      throw new Error("El feed RSS no se pudo interpretar correctamente.");
+    }
+
+    return [...xml.querySelectorAll("item")]
+      .map((item) => {
+        const titleNode = item.querySelector("title");
+        const linkNode = item.querySelector("link");
+        const pubDateNode = item.querySelector("pubDate");
+        const authorNode = item.querySelector("dc\\:creator, creator");
+
+        const title = titleNode && titleNode.textContent ? titleNode.textContent.trim() : "";
+        const link = linkNode && linkNode.textContent ? linkNode.textContent.trim() : "";
+        const pubDate = pubDateNode && pubDateNode.textContent ? pubDateNode.textContent.trim() : "";
+        const author = authorNode && authorNode.textContent ? authorNode.textContent.trim() : "El País";
+
+        if (!title || !link) return null;
+
+        return {
+          title,
+          link,
+          pubDate,
+          author,
+        };
+      })
+      .filter(Boolean)
+      .slice(0, 4);
+  }
 
   async function loadNews() {
     if (!newsList) return;
 
     try {
-      const response = await fetch("https://api.rss2json.com/v1/api.json?rss_url=https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada");
+      const response = await fetch(newsFeedUrl);
       if (!response.ok) throw new Error("No se pudieron cargar las noticias");
 
-      const data = await response.json();
-      const items = (data.items || []).filter((item) => item.title && item.link).slice(0, 4);
+      const xmlText = await response.text();
+      const items = parseNewsItems(xmlText);
 
       if (!items.length) {
         newsList.innerHTML = '<li class="news-item empty">No hay noticias disponibles ahora mismo.</li>';
@@ -139,14 +174,20 @@
       }
 
       newsList.innerHTML = items.map((item) => {
-        const date = new Date(item.pubDate).toLocaleDateString("es-ES", { day: "2-digit", month: "short" });
-        const domain = new URL(item.link).hostname.replace(/^www\./, "");
+        const date = item.pubDate ? new Date(item.pubDate).toLocaleDateString("es-ES", { day: "2-digit", month: "short" }) : "Hoy";
+        const domain = (() => {
+          try {
+            return new URL(item.link).hostname.replace(/^www\./, "");
+          } catch {
+            return "elpais.com";
+          }
+        })();
 
         return `
           <li class="news-item">
             <span class="news-tag">${domain}</span>
             <a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>
-            <small>${date} · ${item.author || "El País"}</small>
+            <small>${date} · ${item.author}</small>
           </li>
         `;
       }).join("");
