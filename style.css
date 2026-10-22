@@ -356,6 +356,42 @@ section[id],footer[id]{scroll-margin-top:90px}
 .site-footer h2{font-size:clamp(1.8rem,4.5vw,2.8rem);margin:0 0 .6rem}
 .footer-lead{color:var(--muted);margin:0 0 1.6rem}
 
+.feedback-panel{
+  margin: 0 0 1.5rem;
+  padding: 1.4rem;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(17,27,47,.96), rgba(17,27,47,.74));
+  border: 1px solid rgba(146,167,255,.16);
+  box-shadow: var(--shadow);
+}
+.feedback-header{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1rem}
+.feedback-kicker{margin:0 0 .2rem;color:var(--accent);font-size:.7rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+.feedback-header h3{margin:0;font-size:1.35rem}
+.feedback-badge{padding:.4rem .7rem;border-radius:999px;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text);background:rgba(110,231,255,.12);border:1px solid rgba(110,231,255,.18)}
+.feedback-form{display:grid;gap:1rem}
+.field-row{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:1rem}
+.feedback-form label{display:grid;gap:.45rem;color:var(--muted);font-size:.9rem;font-weight:700}
+.feedback-form input,
+.feedback-form select,
+.feedback-form textarea{
+  width:100%; border:1px solid rgba(146,167,255,.16); border-radius:14px; padding:.8rem .9rem; background:rgba(255,255,255,.04); color:var(--text); font:inherit; resize:vertical;
+}
+.feedback-form input::placeholder,
+.feedback-form textarea::placeholder{color:var(--muted)}
+.feedback-form textarea{min-height:120px}
+.form-actions{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center}
+.feedback-response{
+  margin-top: 1rem;
+  padding: .9rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(110,231,255,.18);
+  background: rgba(110,231,255,.06);
+  color: var(--text);
+  line-height:1.55;
+}
+.feedback-response.success{border-color:rgba(122,255,180,.28);background:rgba(122,255,180,.08)}
+.feedback-response.warning{border-color:rgba(255,202,74,.26);background:rgba(255,202,74,.08)}
+
 .weather-card{
   margin: 0 0 1.8rem;
   padding: 1.4rem 1.5rem;

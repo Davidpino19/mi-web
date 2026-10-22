@@ -593,6 +593,71 @@
     chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
   }
 
+  const feedbackForm = document.getElementById("feedbackForm");
+  const feedbackResponse = document.getElementById("feedbackResponse");
+  const issueLink = document.getElementById("issueLink");
+
+  function buildIssueUrl(formData) {
+    const name = (formData.get("name") || "Usuario").toString().trim() || "Usuario";
+    const type = (formData.get("type") || "sugerencia").toString().trim() || "sugerencia";
+    const subject = (formData.get("subject") || "Sugerencia").toString().trim() || "Sugerencia";
+    const message = (formData.get("message") || "").toString().trim();
+    const title = encodeURIComponent(`[${type}] ${subject}`);
+    const body = encodeURIComponent(
+      `### Datos del remitente\n- Nombre: ${name}\n- Tipo: ${type}\n\n### Mensaje\n${message}`
+    );
+    return `https://github.com/Davidpino19/mi-web/issues/new?title=${title}&labels=feedback,web&body=${body}`;
+  }
+
+  if (feedbackForm) {
+    feedbackForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const formData = new FormData(feedbackForm);
+      const name = (formData.get("name") || "").toString().trim();
+      const email = (formData.get("email") || "").toString().trim();
+      const type = (formData.get("type") || "sugerencia").toString();
+      const subject = (formData.get("subject") || "").toString().trim();
+      const message = (formData.get("message") || "").toString().trim();
+
+      if (!name || !email || !subject || !message) {
+        if (feedbackResponse) {
+          feedbackResponse.textContent = "Falta alguno de los campos obligatorios. Revisa el formulario antes de enviar.";
+          feedbackResponse.className = "feedback-response warning";
+        }
+        return;
+      }
+
+      const autoResponse = `Gracias, ${name}. He recibido tu ${type} sobre “${subject}”. En breve te responderé por correo a ${email}. También puedes abrir directamente una incidencia para dejar constancia del mensaje.`;
+
+      if (feedbackResponse) {
+        feedbackResponse.textContent = autoResponse;
+        feedbackResponse.className = "feedback-response success";
+      }
+
+      if (issueLink) {
+        issueLink.href = buildIssueUrl(formData);
+      }
+
+      const mailLink = `mailto:daviidpino19@outlook.es?subject=${encodeURIComponent(`[${type.toUpperCase()}] ${subject}`)}&body=${encodeURIComponent(`Nombre: ${name}\nEmail: ${email}\nTipo: ${type}\n\nMensaje:\n${message}`)}`;
+      const mailButton = document.createElement("a");
+      mailButton.href = mailLink;
+      mailButton.className = "btn btn-ghost";
+      mailButton.textContent = "Enviar por correo";
+      mailButton.target = "_blank";
+      mailButton.rel = "noopener noreferrer";
+
+      const actions = feedbackForm.querySelector(".form-actions");
+      if (actions) {
+        const existingMailButton = actions.querySelector(".mail-trigger");
+        if (existingMailButton) existingMailButton.remove();
+        mailButton.classList.add("mail-trigger");
+        actions.appendChild(mailButton);
+      }
+
+      feedbackForm.reset();
+    });
+  }
+
   function cleanText(value) {
     return value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
   }
