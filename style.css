@@ -348,6 +348,10 @@ section[id],footer[id]{scroll-margin-top:90px}
 @media (max-width: 768px){
   .chatbot-toggle{right:16px; bottom:18px; width:56px; height:56px}
   .chatbot{right:10px; bottom:80px; width:calc(100vw - 20px)}
+  .field-row{grid-template-columns:1fr}
+  .form-actions{flex-direction:column;align-items:stretch}
+  .form-actions .btn{width:100%;justify-content:center}
+  .feedback-header{flex-direction:column;align-items:flex-start}
 }
 
 /* ====== Pie ====== */
