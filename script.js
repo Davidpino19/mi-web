@@ -662,19 +662,70 @@
     return value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
   }
 
-  function getBotReply(message) {
+  const centerAiConfig = {
+    baseURL: "https://ia.simarro/llmapi/v1",
+    apiKey: "TU_CLAVE_API",
+    model: "simarro/Qwen38-DualSpark-medium",
+  };
+
+  async function askCenterAi(userMessage) {
+    if (!centerAiConfig.apiKey || centerAiConfig.apiKey === "TU_CLAVE_API") {
+      return null;
+    }
+
+    try {
+      const response = await fetch(`${centerAiConfig.baseURL}/chat/completions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${centerAiConfig.apiKey}`,
+        },
+        body: JSON.stringify({
+          model: centerAiConfig.model,
+          messages: [
+            {
+              role: "system",
+              content: "Eres David Pino, un estudiante de 1º de DAM del IES Simarro. Responde en español como si fueras él, con un tono natural, cercano, claro y profesional. Habla en primera persona, explica su formación, experiencia en hostelería, interés por la tecnología, el deporte, la música y su perfil personal. Si te preguntan por contacto, indica que puedes escribir a daviidpino19@outlook.es y visitar su perfil de LinkedIn. No inventes cosas que no estén en su perfil."
+            },
+            { role: "user", content: userMessage }
+          ],
+          temperature: 0.7,
+          max_tokens: 350
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("La API del centro no respondió correctamente.");
+      }
+
+      const data = await response.json();
+      const answer = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content ? data.choices[0].message.content : "";
+      if (!answer) {
+        throw new Error("La API no devolvió texto válido.");
+      }
+
+      return answer.trim();
+    } catch (error) {
+      console.error("Error al consultar la IA del centro:", error);
+      return null;
+    }
+  }
+
+  async function getBotReply(message) {
     const query = cleanText(message);
+    const aiResponse = await askCenterAi(message);
+    if (aiResponse) return aiResponse;
 
     if (!query) return "Escribe algo para que pueda ayudarte.";
-    if (query.includes("hola") || query.includes("buenas") || query.includes("saludos")) return "¡Hola! Soy el asistente de David. ¿Quieres saber algo sobre su experiencia, formación o contacto?";
-    if (query.includes("experiencia") || query.includes("trabajo") || query.includes("hosteleria") || query.includes("hostelería")) return "David ha trabajado durante 8 años en hostelería, y esa experiencia le ha ayudado a desarrollar atención al cliente, trabajo bajo presión, organización y trabajo en equipo.";
-    if (query.includes("formacion") || query.includes("estudia") || query.includes("dam") || query.includes("curso")) return "Actualmente está estudiando 1º de Desarrollo de Aplicaciones Multiplataforma (DAM) en el IES Simarro.";
-    if (query.includes("proyecto") || query.includes("proyectos") || query.includes("que hace") || query.includes("habilidades")) return "Su perfil combina formación tecnológica con experiencia real en hostelería, además de interés por el deporte, la música, la tecnología y la creación de proyectos personales.";
-    if (query.includes("contacto") || query.includes("email") || query.includes("correo") || query.includes("mensaje")) return "Puedes contactar con David por correo en daviidpino19@outlook.es. También puedes usar el botón de contacto de la web.";
-    if (query.includes("tecnologia") || query.includes("informatica") || query.includes("software") || query.includes("programacion") || query.includes("programación")) return "David está enfocando su camino hacia la tecnología y el desarrollo, especialmente en el ámbito de DAM y la creación de proyectos digitales.";
-    if (query.includes("deporte") || query.includes("futbol") || query.includes("fútbol")) return "El deporte forma parte de su rutina y de su energía diaria. El fútbol y el ejercicio son parte importante de su día a día.";
-    if (query.includes("quien es") || query.includes("quien eres") || query.includes("quien es david") || query.includes("perfil")) return "David Pino es estudiante de DAM, trabaja con entusiasmo en tecnología y tiene una sólida experiencia en hostelería. También le gusta el deporte, la música y aprender cosas nuevas.";
-    return "Puedo ayudarte con información sobre la experiencia, formación, contacto y perfil de David. Prueba con: experiencia, formación, contacto o proyectos.";
+    if (query.includes("hola") || query.includes("buenas") || query.includes("saludos")) return "¡Hola! Soy David, estudiante de DAM en el IES Simarro. ¿Quieres saber algo sobre mi experiencia, formación o contacto?";
+    if (query.includes("experiencia") || query.includes("trabajo") || query.includes("hosteleria") || query.includes("hostelería")) return "He trabajado durante años en hostelería, y esa experiencia me ha ayudado a desarrollar atención al cliente, responsabilidad, organización y trabajo en equipo.";
+    if (query.includes("formacion") || query.includes("estudia") || query.includes("dam") || query.includes("curso")) return "Estoy estudiando 1º de Desarrollo de Aplicaciones Multiplataforma (DAM) en el IES Simarro.";
+    if (query.includes("proyecto") || query.includes("proyectos") || query.includes("que hace") || query.includes("habilidades")) return "Mi perfil combina formación tecnológica con experiencia real en hostelería, además de interés por la tecnología, el deporte, la música y la creación de proyectos digitales.";
+    if (query.includes("contacto") || query.includes("email") || query.includes("correo") || query.includes("mensaje")) return "Puedes contactarme por correo en daviidpino19@outlook.es. También puedes ver mi perfil de LinkedIn desde el botón del pie de página.";
+    if (query.includes("tecnologia") || query.includes("informatica") || query.includes("software") || query.includes("programacion") || query.includes("programación")) return "Estoy enfocando mi camino hacia la tecnología y el desarrollo, especialmente en el ámbito de DAM y la creación de proyectos digitales.";
+    if (query.includes("deporte") || query.includes("futbol") || query.includes("fútbol")) return "El deporte forma parte de mi rutina y de mi energía diaria. El fútbol y el ejercicio son parte importante de mi día a día.";
+    if (query.includes("quien es") || query.includes("quien eres") || query.includes("perfil")) return "Soy David Pino, estudiante de DAM, con experiencia en hostelería y gran interés por la tecnología, la programación y el aprendizaje continuo.";
+    return "Puedo ayudarte con información sobre mi experiencia, formación, contacto y perfil profesional. Prueba con: experiencia, formación, contacto o proyectos.";
   }
 
   function toggleChatbot(forceOpen) {
@@ -695,24 +746,26 @@
   }
 
   if (chatbotForm) {
-    chatbotForm.addEventListener("submit", (event) => {
+    chatbotForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (!chatbotInput) return;
       const text = chatbotInput.value.trim();
       if (!text) return;
       appendMessage(text, "user");
-      const reply = getBotReply(text);
       chatbotInput.value = "";
+
+      const reply = await getBotReply(text);
       setTimeout(() => appendMessage(reply, "bot"), 250);
     });
   }
 
   document.querySelectorAll(".quick-pill").forEach((button) => {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       const question = button.getAttribute("data-question");
       if (!question) return;
       appendMessage(question, "user");
-      setTimeout(() => appendMessage(getBotReply(question), "bot"), 180);
+      const reply = await getBotReply(question);
+      setTimeout(() => appendMessage(reply, "bot"), 180);
       toggleChatbot(true);
     });
   });
